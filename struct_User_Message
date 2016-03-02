@@ -1,0 +1,41 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+
+struct User{
+
+	int id;
+	char name[20];
+	int age;
+	
+};
+
+struct Message{
+
+	int id;
+	char content[100];
+	User from[20];
+	User to[20];
+
+};
+
+void initUser(User first, int id, char* name, int age)
+{
+	
+
+    first.id = id;
+	strcpy(first.name, name);
+	first.age = age;
+	
+}
+
+void initMessage(Message second, int id, char* content,)
+
+
+
+int main()
+{
+	
+
+	return 0;
+}
