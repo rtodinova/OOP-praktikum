@@ -1,0 +1,77 @@
+#include<iostream>
+using namespace std;
+
+struct Sequence{
+	int numbers[20];
+	int n;
+};
+
+void init(Sequence& s)
+{
+	cout << "n= ";
+	cin >> s.n;
+	for (int i = 0; i < s.n; i++)
+	{
+		cout << "numbers[" << i << "]= ";
+		cin >> s.numbers[i];
+	}
+}
+
+int sum(Sequence s)
+{
+	int sum = s.numbers[0];
+	for (int i = 1; i < s.n; i++)
+    sum = sum + s.numbers[i];
+	return sum;
+	
+}
+
+int dif(Sequence s)
+{
+	int count = 0;
+	for (int i = 0; i < s.n; i++)
+	if (s.numbers[i] != 0)
+			count++;
+	return count;
+}
+
+int first(Sequence s)
+{
+	int firstNum = 0;
+	for (int i = 0; i < s.n; i++)
+		if (s.numbers[i] > 0)
+			return s.numbers[i];
+	return -1;
+}
+
+bool compare(Sequence s,int numbers2[20], int n2)
+{
+	int br = 0;
+	if (s.n != n2) return false;
+	for (int i = 0; i < s.n; i++)
+	if (s.numbers[i] == numbers2[i]) br++;
+	if (br == s.n) return true;
+	else return false;
+}
+
+int main()
+{
+	Sequence s;
+	
+	init(s);
+	cout << "Sum: " << sum(s) << endl;
+	cout << "Elements != 0: " << dif(s) << endl;
+	cout << "First element >0 " << first(s) << endl;
+	int numbers2[20], n2;
+	cout << "n2= ";
+	cin >> n2;
+	for (int i = 0; i < n2; i++)
+	{
+		cout << "numbers2[" << i << "]= " << endl;
+		cin >> numbers2[i];
+	}
+	if (compare(s,numbers2,n2)) cout << "Yes" << endl;
+	else cout << "No " << endl;
+
+	return 0;
+}
