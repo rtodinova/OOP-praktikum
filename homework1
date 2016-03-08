@@ -1,0 +1,164 @@
+#include<iostream>
+#include<cstring>
+#include<iomanip>
+
+using namespace std;
+
+struct Employee{
+	char name[30];
+	double salary;
+};
+
+struct Firm{
+	char nameBoss[30];
+	Employee list;
+}emp[15];
+
+// Namirane na slujitel po ime bez funkciqta strcmp
+
+/*int isEmployed(Employee m, char* name2, int& n)
+{
+	int count = 0;
+	int lenName = strlen(m.name);
+	int lenName2 = strlen(name2);
+	int j = 0;
+	for (j = 0; j <= n; j++)
+	{
+		count = 0;
+	
+			for (int i = 0; i < lenName2; i++)
+			{
+				if (emp[j].list.name[i] == name2[i])
+					count++;
+				if (count == lenName2) return j;
+
+			}
+	
+	}
+	return -1;
+}*/
+
+//  Namirane na slujitel po ime s funkciqta strcmp
+
+int isEmployed(Employee& m, char* name2, int& n)
+{
+	
+	for (int i = 0; i <= n; i++)
+	{
+		int flag = strcmp(name2, emp[i].list.name);
+		if (!flag) return i;
+	}
+	return -1;
+}
+
+// proverka dali ima svobodni mesta
+
+bool isFullFirm(int& n)
+{
+	if (n == 15) return false;
+	if (n < 15) return true;
+	
+} 
+
+//dobavqne na slujitel, ako ima svobodni mesta
+
+void addEmployee(int& n, char* addName, int addSalary, Employee& m)
+{
+	int len = strlen(addName);
+	if (isFullFirm(n))
+	{
+		n += 1;
+		
+		for (int i = 0; i < len; i++)
+			emp[n].list.name[i] = addName[i];
+		emp[n].list.salary = addSalary;
+	}
+	else cout << "No free positions!" << endl;
+}
+
+//premahvane na slujitel, ako sushtestvuva takuv
+
+void removeEmployee(Employee& m, int choice, int& n)
+{
+	if (n>0)
+	{
+		for (int i = 0; i < strlen(emp[choice].list.name); i++)
+			emp[choice].list.name[i] = ' ';
+		emp[choice].list.salary = 0;
+	}
+	else cout << "No employees! " << endl;
+}
+
+//ne raboti korektno(presmqta samo za 100%)
+
+void changeSalary(Employee& m, int percent, int newChoice)
+{
+	emp[newChoice].list.salary = emp[newChoice].list.salary + emp[newChoice].list.salary*(percent / 100);
+}
+
+void printf(int& n, Employee m)
+{
+	int j = 0;
+	for (j = 0; j <= n; j++)
+	{
+		int len = strlen(emp[j].list.name);
+		for (int i = 0; i < len; i++)
+		{
+			cout << emp[j].list.name[i];
+		}
+		cout <<"   " <<emp[j].list.salary << endl;
+	}
+}
+
+int main()
+{
+	int n;
+	cout << "Number of employees: ";
+	cin >> n;
+	Employee m; // = { " ", 20 };
+	for (int j = 0; j <= n; j++)
+	{
+		cout << "Name of employee " << j << " ";
+		cin.getline(emp[j].list.name, 30);
+	}
+	for (int j = 1; j <= n; j++)
+	{
+		cout << "Salary of employee " << j << " ";
+		cin >> emp[j].list.salary;
+	}
+	cin.ignore();
+	char name2[30];
+	cout << "Search employee in the list: ";
+	cin.getline(name2, 30);
+	int index = isEmployed(m, name2,n);
+	if (index == -1) cout << "No employee by that name! " << endl;
+	else cout << index << endl;
+	if (isFullFirm(n)) cout << "Yes,there are " << 15 - n << " vacancies." << endl;
+	else cout << "No vacancies available. " << endl;
+
+	cout << "New employee's name: ";
+	char addName[30];
+	cin.getline(addName, 30);
+	int addSalary;
+	cout << "Salary of the new employee: ";
+	cin >> addSalary;
+	addEmployee(n, addName,addSalary, m);
+	printf(n, m);
+	int choice;
+	cout << "Remove employee. Index: ";
+	cin >> choice;
+	removeEmployee(m, choice, n);
+	int newChoice, percent;
+	cout << "Increase salary of employee (index):  ";
+	cin >> newChoice;
+	cout << "Percent: ";
+	cin >> percent;
+	if (percent > 100 || percent < 0)
+	{
+		cout << "Bad Input!" << endl;
+		return 1;
+	}
+	changeSalary(m, percent, newChoice);
+	printf(n, m);
+	return 0;
+}
