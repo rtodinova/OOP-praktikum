@@ -1,0 +1,91 @@
+#include<iostream>
+#include<cmath>
+
+using namespace std;
+
+struct Vector{
+	double x;
+	double y;
+	double z;
+
+	double length()
+	{
+		return sqrt(x*x + y*y + z*z);
+	}
+
+	double normalize()
+	{
+		double len = length();
+
+
+	}
+
+};
+
+struct Sphere{
+	Vector position;
+	float size;
+};
+
+struct Cube{
+	Vector position;
+	float size;
+
+	double move(const Vector& a)
+	{
+		return 
+	}
+};
+
+
+
+void initA(Vector& a, double xa, double ya, double za)
+{
+	a.x = xa;
+	a.y = ya;
+	a.z = za;
+
+}
+
+void initB(Vector& b, double xb, double yb, double zb)
+{
+	b.x = xb;
+	b.y = yb;
+	b.z = zb;
+
+}
+
+void print(Vector a)
+{
+	cout << a.x << " " << a.y << " " << a.z << endl;
+}
+
+Vector sum(const Vector& a, const Vector& b)
+{
+	Vector c = sum(a, b);
+	c.x = a.x + b.x;
+	c.y = a.y + b.y;
+	c.z = a.z + b.z;
+
+	return c;
+}
+
+
+
+int main()
+{
+	Vector a, b;
+	double xa, ya, za;
+	cout << "x,y,z= ";
+	cin >> xa >> ya >> za;
+	double xb, yb, zb;
+	cout << "x1,y1,z1: ";
+	cin >> xb >> yb >> zb;
+	initA(a, xa, ya, za);
+	initB(b, xb, yb, zb);
+	print(sum(a, b));
+
+	print(a);
+
+	return 0;
+}
