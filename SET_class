@@ -1,0 +1,108 @@
+#ifndef _SET_H
+#define _SET_H
+#include<iostream>
+
+using namespace std;
+
+class Set{
+
+private:
+	int size;
+	int* multitude;
+
+public:
+	Set();
+	Set(int);
+	Set(Set const&);
+	~Set();
+	void resize(int);
+	bool contain(int);
+	bool operator==(Set const&);
+	Set operator+(Set const&);
+	Set& operator+=(Set const&);
+	Set operator^(Set const&);
+	Set& operator^=(Set const&);
+	Set operator-(Set const&);
+	Set& operator-=(Set const&);
+
+	friend ostream& operator<<(ostream&, Set const&);
+
+};
+
+
+#endif _SET_H
+
+#include "Header.h"
+#include <iostream>
+
+using namespace std;
+
+Set::Set()
+{
+	size = 0;
+	multitude = NULL;
+}
+
+Set::Set(int num)
+{
+	size = 1;
+	multitude = new int[size];
+	multitude[0] = num;
+
+}
+
+Set::~Set()
+{
+	delete[]multitude;
+}
+
+Set::Set(Set const& s)
+{
+	size = s.size;
+	multitude = new int[size];
+	for (int i = 0; i < size; i++)
+		multitude[i] = s.multitude[i];
+}
+
+void Set::resize(int newSize)
+{
+
+	size = newSize;
+	int* multitude1 = new int[size];
+	for (int i = 0; i < size; i++)
+		multitude1[i] = multitude[i];
+
+	delete[]multitude;
+	multitude = multitude1;
+
+}
+
+bool Set::contain(int n)
+{
+	for (int i = 0; i < size; i++)
+		if (n == multitude[i]) return true;
+	return false;
+}
+
+bool Set::operator==(Set const& a)
+{
+	if (size != a.size) return false;
+		for (int i = 0; i < size; i++)
+		if (!contain(a.multitude[i]))
+			return false;
+	return true;
+}
+
+Set Set::operator+(Set const& b)
+{	
+	Set newSet;
+
+	
+	for (int i = 0; i < size; i++)
+	{
+		newSet.multitude 
+	}
+	
+
+}
+
