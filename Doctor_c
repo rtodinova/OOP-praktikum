@@ -1,0 +1,135 @@
+#ifndef PATIENT_H
+#define PATIENT_H
+
+class Patient{
+private:
+	char name[30];
+	char date[20];
+	int visits;
+public:
+	Patient();
+	Patient(char*, char*, int);
+	void setName(const char*);
+	void setDate(const char* );
+	void setVisits(int);
+	const char* getName() const;
+	const char* getDate() const;
+	int getVisits() const;
+
+};
+
+#endif PATIENT_H
+
+---------------------------------------------------------------
+
+#include<iostream>
+#include<cstring>
+#include"Patient.h"
+
+using namespace std;
+
+Patient::Patient(){
+	strcpy_s(name, "");
+	strcpy_s(date, "");
+	visits = 0;
+}
+
+Patient::Patient(char* name1, char* date1, int visits1)
+{
+	strcpy_s(name, name1);
+	strcpy_s(date, date1);
+	visits = visits1;
+}
+
+void Patient::setName(const char* _name)
+{
+	strcpy_s(name, _name);
+
+}
+
+void Patient::setDate(const char* _date)
+{
+	strcpy_s(date, _date);
+}
+
+void Patient::setVisits(int _visits)
+{
+	visits = _visits;
+}
+
+const char* Patient::getName() const
+{
+	return name;
+}
+
+const char* Patient::getDate() const
+{
+	return date;
+}
+
+int Patient::getVisits() const
+{
+	return visits;
+}
+
+-----------------------------------------------------------
+
+#ifndef DOCTOR_H
+#define DOCTOR_H
+#include"Patient.h"
+
+class Doctor{
+private:
+	Patient list[50];
+	int size;
+public:
+	Doctor();
+	double avg_visits() const;
+	int filter(int, Patient*);
+
+};
+
+#endif DOCTOR_H
+
+-----------------------------------------------------------
+
+#include<iostream>
+#include<cstring>
+#include"Doctor.h"
+
+using namespace std;
+
+Doctor::Doctor():size(0)
+{
+
+}
+
+double Doctor::avg_visits() const
+{
+	int sum = 0;
+	for (int i = 0; i < size; ++i)
+		sum += list[i].getVisits();
+
+	return (double)sum / size;
+}
+
+int Doctor::filter(int visits, Patient* ps)
+{
+	int index = 0;
+	for (int i = 0; i < size; ++i)
+		if (list[i].getVisits() > visits)
+		{
+		ps[index] = list[i];
+		}
+	return index;
+}
+
+------------------------------------------------
+
+int main()
+{
+
+Doctor d;
+d.add(Patient( "Pesho" , "16.08.1991" , 4 ));
+
+}
