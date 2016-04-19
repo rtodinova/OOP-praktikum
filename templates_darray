@@ -1,0 +1,183 @@
+#include<iostream>
+using namespace std;
+
+template<class DARR>
+class DArray
+{
+	DARR* array; //нашият масив
+	int size;  //докъде е запълнен
+	int capacity; //максимален размер
+
+	void resize();
+	bool full() const;
+public:
+	DArray();
+	DArray(DArray const&);
+
+	~DArray();
+
+	void pushBack(DARR);
+	void setValue(int, DARR);
+	void popBack();
+	void deleteValue(int);
+
+	int getSize() const;
+	DARR getValue(int) const;
+
+	void print() const;
+};
+
+template<class DARR>
+DArray<DARR>::DArray()
+{
+	capacity = 10; //Задаваме максимална дължина на масива 10
+	array = new DARR[capacity]; //Заделяме в динамичната памет масив с големина capacity
+	size = 0; //Масивът е празен => размерът му е 0
+}
+
+template<class DARR>
+DArray<DARR>::DArray(DArray const& rhs)
+{
+	size = rhs.size;
+	capacity = rhs.capacity;
+	array = new DARR[capacity];
+
+	for (int i = 0; i < size; i++)
+		array[i] = rhs.array[i];
+}
+
+template<class DARR>
+DArray<DARR>::~DArray()
+{
+	delete[] array;
+}
+
+template<class DARR>
+void DArray<DARR>::resize()
+{
+	capacity *= 1.5;
+
+	//Заделяме си нов масив с по-голям капацитет от текущия пълен
+	DARR* newArray = new DARR[capacity];
+
+	//Копираме всички елементи на текущия масив в новия
+	for (int i = 0; i < size; i++)
+		newArray[i] = array[i];
+
+	//В момента имаме следната картинка:
+	//[ 1 | 2 | 3 | 4 ] <- array
+	//[ 1 | 2 | 3 | 4 |  |  ] <- newArray
+
+	//Освободваме паметта за текущия пълен масив
+	delete[] array;
+	//В момента имаме:
+	//? <- array (array сочи към памет, към която нямаме достъп)
+	//[ 1 | 2 | 3 | 4 |  |  ] <- newArray
+
+	//Пренасочваме array да сочи към newArray
+	array = newArray;
+	//[ 1 | 2 | 3 | 4 |  |  ] <- newArray, array
+}
+
+template<class DARR>
+bool DArray<DARR>::full() const
+{
+	return size == capacity;
+}
+
+template<class DARR>
+int DArray<DARR>::getSize() const
+{
+	return size;
+}
+
+template<class DARR>
+void DArray<DARR>::pushBack(DARR newValue)
+{
+	//Ако масивът е пълен, го разширяваме
+	if (full())
+		resize();
+
+	array[size++] = newValue;
+}
+
+template<class DARR>
+void DArray<DARR>::popBack()
+{
+	if (size > 0)
+		size--;
+}
+
+template<class DARR>
+void DArray<DARR>::setValue(int index, DARR newValue)
+{
+	//Ако желаният индекс е по-голям от текущия максимален,
+	//добавяме отзад достатъчно на брпй нули и
+	//задаваме на позиция index новата стойност
+	//Няма проблем ако масивът се напълни заради добавените нули,
+	//тъй като pushBack ще извика resize, ако е необходимо
+	if (index >= size)
+		for (int i = size; i <= index; i++)
+			pushBack(0);
+
+	array[index] = newValue;
+}
+
+template<class DARR>
+DARR DArray<DARR>::getValue(int index) const
+{
+	if (index < size)
+		return array[index];
+
+	return 0;
+}
+
+template<class DARR>
+void DArray<DARR>::deleteValue(int index)
+{
+	if (index < size)
+		for (int i = index; i < size - 1; i++)
+			array[i] = array[i + 1];
+
+	size--;
+}
+
+template<class DARR>
+void DArray<DARR>::print() const
+{
+	for (int i = 0; i < size; i++)
+    cout << array[i] << " ";
+	cout << endl;
+}
+
+int main()
+{
+	DArray<bool> d;
+
+	for (int i = 0; i < 20; i++)
+		d.pushBack(i);
+
+	d.print();
+
+	d.setValue(5, 2452);
+	d.print();
+
+	d.deleteValue(5);
+	d.print();
+
+	d.popBack();
+	d.print();
+
+	d.setValue(22, 12222);
+	d.print();
+
+	cout << d.getSize() << " " << d.getValue(0) << endl;
+
+	//Пробвайте това, като изтриете конструктора за копиране
+	DArray<bool> copyD = d;
+	copyD.setValue(0, 55);
+	d.print();
+	copyD.print();
+	
+	return 0;
+}
