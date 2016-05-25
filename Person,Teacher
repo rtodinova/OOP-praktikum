@@ -1,0 +1,143 @@
+#ifndef PERSON_H
+#define PERSON_H
+
+class Person{
+private:
+	char* name;
+	int age;
+	void copy(const Person&);
+public:
+	Person();
+	~Person();
+	Person(const Person&);
+	Person(const char*, int);
+	Person& operator=(const Person&);
+	void print() const;
+};
+
+#endif PERSON_H
+
+---------------------------------------------------------------------------------------------------------------------------
+#include<iostream>
+#include<cassert>
+#include"Person.h"
+
+using namespace std;
+
+void Person::copy(const Person& p)
+{
+	name = new char[strlen(p.name) + 1];
+	assert(name);
+	strcpy(name, p.name);
+	age = p.age;
+	if (age < 18)
+		age = 18;
+}
+
+Person::Person()
+{
+	name = NULL;
+	age = 18;
+}
+
+Person::~Person()
+{
+	delete[]name;
+}
+
+Person::Person(const Person& p)
+{
+	delete[]name;
+	copy(p);
+}
+
+Person::Person(const char* n, int a)
+{
+	name = new char[strlen(n) + 1];
+	assert(name);
+	strcpy(name, n);
+	age = a;
+}
+
+Person& Person::operator=(const Person& p)
+{
+	if (this != &p)
+	{
+		delete[]name;
+		copy(p);
+	}
+
+	return *this;
+}
+
+void Person::print() const
+{
+	cout << name << endl;
+	cout << age << endl;
+}
+
+----------------------------------------------------------------------------------------------------------------------
+
+#ifndef STATEEMPLOYEE_H
+#define STATEEMPLOYEE_H
+#include"Person.h"
+
+class StateEmployee : virtual public Person{
+private:
+	int contract;
+	void copy(const StateEmployee&);
+public:
+	StateEmployee();
+	~StateEmployee();
+	StateEmployee(const StateEmployee&);
+	StateEmployee(const char*, int,int);
+	StateEmployee& operator=(const StateEmployee&);
+	void print() const; 
+};
+
+#endif STATEEMPLOYEE_H
+
+-------------------------------------------------------------------------------------------------------------------------
+
+#include<iostream>
+#include<cassert>
+#include"StateEmployee.h"
+
+using namespace std;
+
+StateEmployee::StateEmployee() : Person()
+{
+	contract = 0;
+}
+
+StateEmployee::~StateEmployee()
+{
+}
+
+StateEmployee::StateEmployee(const StateEmployee& p) : Person(p)
+{
+	copy(p);
+}
+
+StateEmployee::StateEmployee(const char* n, int a, int c) : Person(n,a)
+{
+	contract = 0;
+}
+
+StateEmployee& StateEmployee::operator=(const StateEmployee& p)
+{
+	if (this != &p)
+	{
+		Person::operator=(p);
+		copy(p);
+	}
+
+	return *this;
+}
+
+void StateEmployee::print() const
+{
+	Person::print();
+	cout << contract << endl;
+
+}
